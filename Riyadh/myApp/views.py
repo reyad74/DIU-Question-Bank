@@ -10,6 +10,6 @@ def signup(request):
 def signin(request):
     return render(request,"myApp/signin.html")
 
-def signup(request):
+def signout(request):
     pass
     
