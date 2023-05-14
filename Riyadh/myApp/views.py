@@ -3,6 +3,7 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 
 
 
@@ -34,8 +35,24 @@ def signup(request):
     return render(request, "myApp/signup.html")
 
 def signin(request):
+    if request.method == 'post':
+        username = request.post['username']
+        password = request.post['password']
+
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            firstname = user.first_name
+            return render(request, "myApp/home.html", {'firstname': firstname})
+        else:
+            messages.error(request,"Bad Credentials!")
+            return redirect('home')
     return render(request, "myApp/signin.html")
 
+
 def signout(request):
-    pass
+    logout(request)
+    messages.success(request, "Logged Out Successfully:")
+    return redirect('home')
     
